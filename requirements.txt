@@ -1,0 +1,9 @@
+json
+pandas
+sqlalchemy
+databricks
+databricks-sdk
+databricks-sql-connector
+databricks-sqlalchemy
+streamlit
+streamlit-aggrid
