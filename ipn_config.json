@@ -1,0 +1,121 @@
+[
+    {
+        "name": "DNOX22",
+        "plant": "RBCB",
+        "schema": "dnox22_ops",
+        "table_name_base": "gold_rbcb_{lgroupkey}_st",
+        "results_table": "silver_rbcb_results",
+        "md_table": "dnox22_dev.rbcb_mes_params_metadata",
+        "line_groups": {
+            "sm": "DNOX2.2 SM",
+            "dm": "DNOX2.2 DM",
+            "mp": "DNOX2.2 MP"
+        },
+        "line_group_len": 10
+    },
+    {
+        "name": "DNOX53",
+        "plant": "RBCB",
+        "schema": "dnox53_ops",
+        "table_name_base": "gold_rbcb_{lgroupkey}_st",
+        "results_table": "silver_rbcb_results",
+        "md_table": "dnox53_dev.rbcb_mes_params_metadata",
+        "line_groups": {
+            "pm": "PM",
+            "sm": "SM",
+            "cb": "CB"
+        },
+        "line_group_len": 2
+    },
+    {
+        "name": "DNOX53",
+        "plant": "NuP1",
+        "schema": "dnox53_ops",
+        "table_name_base": "gold_nup_{lgroupkey}_st",
+        "results_table": "silver_nup_results",
+        "md_table": "dnox53_dev.rbcb_mes_params_metadata",
+        "line_groups": {
+            "mm": "MM",
+            "bf": "BF"
+        },
+        "line_group_len": 2
+    },
+    {
+        "name": "DNOX5X",
+        "plant": "RBCB",
+        "schema": "dnox5x_ops",
+        "table_name_base": "gold_rbcb_{lgroupkey}_st",
+        "results_table": "silver_rbcb_results",
+        "md_table": "dnox5x_dev.rbcb_mes_params_metadata",
+        "line_groups": {
+            "pm": "PM",
+            "sm": "SM",
+            "cb": "CB"
+        },
+        "line_group_len": 2
+    },
+    {
+        "name": "DNOXDM",
+        "plant": "RBCB",
+        "schema": "dnoxdm_ops",
+        "table_name_base": "gold_rbcb_{lgroupkey}_st",
+        "results_table": "silver_rbcb_results",
+        "md_table": "dnoxdm_dev.rbcb_mes_params_metadata",
+        "line_groups": {
+          "dm33":"DM33",
+          "dm34":"DM34",
+          "dm35":"DM35",
+          "dm36":"DM36"          
+        },
+        "line_group_len": 4
+    },
+    {
+        "name": "GPA",
+        "plant": "RBCB",
+        "schema": "gpa_ops",
+        "table_name_base": "gold_rbcb_st",
+        "results_table": "silver_rbcb_results",
+        "md_table": "gpa_dev.rbcb_mes_params_metadata",
+        "line_groups": {
+          "gpa": "Assembly"
+        },
+        "line_group_len": 8
+    },
+    {
+        "name": "DMTL",
+        "plant": "RBCB",
+        "schema": "dmtl_ops",
+        "table_name_base": "gold_rbcb_st",
+        "results_table": "silver_rbcb_results",
+        "md_table": "dmtl_dev.rbcb_mes_params_metadata",
+        "line_groups": {
+            "dmtl": "Assembly"
+        },
+        "line_group_len": 8
+    },
+    {
+        "name": "ML",
+        "plant": "RBCB",
+        "schema": "ml_ops",
+        "table_name_base": "gold_rbcb_st",
+        "results_table": "silver_rbcb_results",
+        "md_table": "ml_dev.rbcb_mes_params_metadata",
+        "line_groups": {
+            "ph": "Assembly"
+        },
+        "line_group_len": 8
+    },
+    {
+        "name": "COS",
+        "plant": "RBCB",
+        "schema": "cos_ops",
+        "table_name_base": "gold_rbcb_st",
+        "results_table": "silver_rbcb_results",
+        "md_table": "cos_dev.rbcb_mes_params_metadata",
+        "line_groups": {
+            "cos": "Sample workshop"
+        },
+        "line_group_len": 15,
+        "ap_aliases": "bronze_rbcb_lines"
+    }
+]
