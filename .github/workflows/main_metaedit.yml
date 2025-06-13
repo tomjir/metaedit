@@ -75,7 +75,7 @@ jobs:
       - name: Configure runtime settings on the webapp
         run: |
           az webapp config set --name metaedit \
-              --resource-group tj-webapp
+              --resource-group tj-webapp \
               --startup-file "streamlit run app.py --server.port 8000 --server.address 0.0.0.0"
 
       - name: 'Deploy to Azure Web App'
