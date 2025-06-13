@@ -1,3 +1,4 @@
+import os
 import json
 import pandas as pd
 from sqlalchemy import text, create_engine
@@ -6,7 +7,7 @@ from sqlalchemy import text, create_engine
 # Databricks setup and initialisation
 server_hostname = "adb-5407587042408609.9.azuredatabricks.net"
 http_path       = "/sql/1.0/warehouses/e5a56724925b98b1"
-access_token    = "dapieb101622e82825aaf9163cdf58758c2f"
+access_token    = os.environ["DATABRICKS_TOKEN"]
 catalog         = "ps_xplatform_prod"
 
 def get_connection(schema):
