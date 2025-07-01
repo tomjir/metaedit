@@ -62,9 +62,9 @@ def generate_query(conn, az_schema, az_md_table, lgroup, station, az_results_tab
 
     if row[1]['IS_TOLERANCE']:
       tolerance1 = '      , CAST(PARAMETER_VALUES["' + row[1]['PARAM_NAME'] + '"]["lower_tolerance"] AS ' + cast + ') AS `'\
-        + coalesce(row[1]['INNER_ALIAS'], row[1]['PARAM_NAME']) + ' [LT]`\n'\
+        + coalesce(row[1]['INNER_ALIAS'], row[1]['PARAM_NAME_SANIT']) + ' [LT]`\n'\
         + '      , CAST(PARAMETER_VALUES["' + row[1]['PARAM_NAME'] + '"]["upper_tolerance"] AS ' + cast + ') AS `'\
-        + coalesce(row[1]['INNER_ALIAS'], row[1]['PARAM_NAME']) + ' [UT]`\n'
+        + coalesce(row[1]['INNER_ALIAS'], row[1]['PARAM_NAME_SANIT']) + ' [UT]`\n'
 
       # New feature as of 2025/4/1
       if coalesce_tolerance and row[1]['OUTER_TRANSFORM'] is not None and row[1]['OUTER_TRANSFORM'][:8] == 'COALESCE':
