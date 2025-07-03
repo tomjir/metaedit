@@ -89,15 +89,15 @@ def generate_query(conn, az_schema, az_md_table, lgroup, station, az_results_tab
       getval = row[1]['INNER_TRANSFORM'].replace('`' + row[1]['PARAM_NAME'] + '`', getval)
 
     if cast == 'STRING':
-      l1 += '      , ' + getval + ' AS `'
+      l1 += '    , ' + getval + ' AS `'
     else:
-      l1 += '      , CAST(' + getval + ' AS ' + cast + ') AS `'
-    l1 += coalesce(row[1]['INNER_ALIAS'], row[1]['PARAM_NAME_SANIT']) + '`\n'\
+      l1 += '    , CAST(' + getval + ' AS ' + cast + ') AS `'
+    l1 += coalesce(row[1]['INNER_ALIAS'], row[1]['PARAM_NAME_SANIT']) + '`\n    '\
       + tolerance1
 
     if row[1]['IS_MART']:
       l2 += '    , ' + fv_start + coalesce(row[1]['OUTER_TRANSFORM'], '`' + coalesce(row[1]['INNER_ALIAS'], row[1]['PARAM_NAME_SANIT']) + '`')\
-        + fv_end + ' AS `' + first_upper(coalesce(row[1]['OUTER_ALIAS'], row[1]['PARAM_NAME_SANIT'])) + '`\n'\
+        + fv_end + ' AS `' + first_upper(coalesce(row[1]['OUTER_ALIAS'], row[1]['PARAM_NAME_SANIT'])) + '`\n    '\
         + tolerance2
 
   az_create_qry = f'''
@@ -114,8 +114,7 @@ def generate_query(conn, az_schema, az_md_table, lgroup, station, az_results_tab
         , {fv_start}LOCATION_STATINDEX{fv_end} as LOCATION_STATINDEX
         , {fv_start}LOCATION_WORKPOSITION{fv_end} as LOCATION_WORKPOSITION
     ---------- LEVEL_2 ----------
-    {l2}
-    FROM (
+    {l2}FROM (
     SELECT LOCATION_RESULT_UID
         , RESULT_DATE_LOCAL_TS
         , TYPE_NUMBER
@@ -129,14 +128,13 @@ def generate_query(conn, az_schema, az_md_table, lgroup, station, az_results_tab
         , LOCATION_STATINDEX
         , LOCATION_WORKPOSITION
     ---------- LEVEL_1 ----------
-    {l1}
-    from {catalog}.{az_schema}.{az_results_table} 
-    where LINE_GROUP = '{lgroup}' and LOCATION_STATION IN ({station})
+    {l1}FROM {catalog}.{az_schema}.{az_results_table}
+    WHERE LINE_GROUP = '{lgroup}' and LOCATION_STATION IN ({station})
     ) level_1
     '''
 
   if group_pos:
-    az_create_qry += "group by session_window(RESULT_DATE_LOCAL_TS, '60 minutes'), UNIQUEPART_ID, WORKCYCLE_COUNTER"
+    az_create_qry += "GROUP BY session_window(RESULT_DATE_LOCAL_TS, '60 minutes'), UNIQUEPART_ID, WORKCYCLE_COUNTER"
 
   return az_create_qry
 
