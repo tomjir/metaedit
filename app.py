@@ -21,6 +21,10 @@ for c in config:
     if c["plant"] == "RBCB":
         ipn_list[c["name"]] = c
 
+# Prepare buffer to store changes until save button hit
+if "changes" not in st.session_state:
+    st.session_state.changes = list()
+
 # Main selection form
 with st.sidebar:
     ipn = st.selectbox("IPN Code", options=ipn_list.keys(), index=None)
@@ -36,11 +40,10 @@ with st.sidebar:
             station_list = conn.execute(
                 select(table.c.LOCATION_STATION)
                 .distinct()
-                .where(table.c.LINE_GROUP==linegrp)
+                .where(table.c.LINE_GROUP == linegrp)
                 .order_by(table.c.LOCATION_STATION)
             )
             station = st.selectbox("Station Number", options=station_list, index=None)
-            upd_view = st.checkbox("Update Gold View", value=True)
 
 if station is not None:
     df = pd.read_sql(table
@@ -58,29 +61,43 @@ if station is not None:
         new_row = (response
                 .grid_response["eventData"]["data"])
         new_row.pop("__pandas_index")
-        conditions = [table.c[key] == value for key, value in old_row.items()]
-        conn.execute(table
-            .update()
-            .where(and_(*conditions))
-            .values(new_row))
-        conn.commit()
-        st.text("The record has been updated.")
-        # Change the view in Databricks
-        if upd_view:
-            st.text("Preparing gold view update.")
-            lgroupreversed = dict(zip(ipn_list[ipn]["line_groups"].values(), ipn_list[ipn]["line_groups"].keys()))
-            st.text(
-                create_single_station(
-                    conn,
-                    ipn_list[ipn]["schema"],
-                    ipn_list[ipn]["md_table"],
-                    ipn_list[ipn]["results_table"],
-                    ipn_list[ipn]["table_name_base"].format(lgroupkey=lgroupreversed[linegrp]),
-                    linegrp,
-                    station,
-                    group_pos=True,
-                    coalesce_tolerance=True,
-                )
-            )
-    else:
-        st.text("Please update table cell and press Enter to save the changes.")
+        st.session_state.changes.append({
+            "old_row": old_row,
+            "new_row": new_row
+        })
+
+if len(st.session_state.changes):
+    if st.button("Save changes", type="primary"):
+        for ch in st.session_state.changes:
+            conditions = [table.c[key] == value for key, value in ch["old_row"].items()]
+            conn.execute(table
+                .update()
+                .where(and_(*conditions))
+                .values(ch["new_row"]))
+            conn.commit()
+        st.text("The record has been updated. Initializing gold view update.")
+        lgroupreversed = dict(zip(ipn_list[ipn]["line_groups"].values(), ipn_list[ipn]["line_groups"].keys()))
+        st.code(
+            create_single_station(
+                conn,
+                ipn_list[ipn]["schema"],
+                ipn_list[ipn]["md_table"],
+                ipn_list[ipn]["results_table"],
+                ipn_list[ipn]["table_name_base"].format(lgroupkey=lgroupreversed[linegrp]),
+                linegrp,
+                station,
+                group_pos=True,
+                coalesce_tolerance=True,
+            ),
+            language="sql"
+        )
+        st.session_state.changes = list()
+
+if len(st.session_state.changes):
+    if st.button("Discard changes", type="secondary"):
+        st.session_state.changes = list()
+
+if len(st.session_state.changes):
+    st.text("There are " + str(len(st.session_state.changes))
+        + " unsaved changes in the buffer. Please click the button to save changes and update the golden view."
+    )
