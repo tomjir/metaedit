@@ -2,6 +2,7 @@ import os
 import json
 import pandas as pd
 from sqlalchemy import text, create_engine
+import streamlit as st
 
 
 # Databricks setup and initialisation
@@ -10,6 +11,7 @@ http_path       = "/sql/1.0/warehouses/e5a56724925b98b1"
 access_token    = os.environ["DATABRICKS_TOKEN"]
 catalog         = "ps_xplatform_prod"
 
+@st.cache_resource
 def get_connection(schema):
     engine = create_engine(
         f"databricks://token:{access_token}@{server_hostname}?http_path={http_path}&catalog={catalog}&schema={schema}"
